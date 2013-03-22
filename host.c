@@ -200,7 +200,8 @@ while(1) {
     * is the host's network address then store the packet in the
     * receive packet buffer
     */
-   if (tmpbuff.dstaddr == hstate->netaddr && tmpbuff.valid == 1 && tmpbuff.new == 1) {
+   if ((tmpbuff.dstaddr == hstate->netaddr || tmpbuff.dstaddr == 1000)
+		&& tmpbuff.valid == 1 && tmpbuff.new == 1) {
       hstate->rcvPacketBuff = tmpbuff;
       hstate->rcvPacketBuff.new = 1;
       hstate->rcvPacketBuff.valid = 1;
@@ -479,6 +480,7 @@ hstate->netaddr = physid; /* default address */
 hstate->nbraddr = EMPTY_ADDR;  
 hstate->rcvPacketBuff.valid = 0;
 hstate->rcvPacketBuff.new = 0;
+hstate->rcvflag = 0;
 }
 
 

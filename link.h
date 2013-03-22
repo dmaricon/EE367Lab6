@@ -1,7 +1,11 @@
+#ifndef LINK_H
+#define LINK_H
+
 /* Definitions and prototypes for the link (link.c)
  */
 
-#define NUMLINKS 2
+#define NUMHOSTS 3
+#define NUMSWITCHES 1
 
 enum LinkType {UNIPIPE}; /* UNIPIPE = unidirectional pipe
                           * We can add more types later
@@ -25,7 +29,7 @@ typedef struct {  /* Has all the information to implement a link */
 
 typedef struct {
    int numlinks;
-   LinkInfo link[NUMLINKS];
+   LinkInfo link[NUMHOSTS*2];
 } linkArrayType;
 
 /* Transmit the packet in pbuff on the link */
@@ -40,3 +44,4 @@ int linkClear(LinkInfo * link);
 /* Initializes a link */
 int linkCreate(LinkInfo * link);
 
+#endif

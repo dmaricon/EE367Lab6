@@ -1,3 +1,5 @@
+#ifndef MAIN_H
+#define MAIN_H
 
 #define PAYLOAD_LENGTH 200 /* Maximum payload size */
 
@@ -10,6 +12,4 @@ typedef struct { /* Packet buffer */
    int new;     /* Indicates if the contents has been downloaded */
 } packetBuffer;
 
-   
-
-
+#endif

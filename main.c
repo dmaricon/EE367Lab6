@@ -13,6 +13,7 @@
 #include "man.h"
 #include "host.h"
 #include "net.h"
+#include "switch.h"
 
 #define EMPTY_ADDR  0xffff  /* Indicates that the empty address */
                              /* It also indicates that the broadcast address */
@@ -23,11 +24,13 @@
 void main()
 {
 hostState hstate;             /* The host's state */
+switchState sstate;
 linkArrayType linkArray;
 manLinkArrayType manLinkArray;
 
 pid_t pid;  /* Process id */
 int physid; /* Physical ID of host */
+int switchid;
 int i;
 int k;
 
@@ -40,7 +43,7 @@ netCreateConnections(& manLinkArray);
 
 /* Create links between nodes but not setting their end nodes */
 
-linkArray.numlinks = NUMLINKS;
+linkArray.numlinks = NUMHOSTS*2;
 netCreateLinks(& linkArray);
 
 /* Set the end nodes of the links */
@@ -48,6 +51,29 @@ netCreateLinks(& linkArray);
 netSetNetworkTopology(& linkArray);
 
 /* Create nodes and spawn their own processes, one process per node */ 
+
+for(switchid=1;switchid<NUMSWITCHES+1;switchid++){
+	pid = fork();
+	if(pid==0){ // child process -- switch
+		switchInit(&sstate,switchid);
+
+		k = netSwitchOutLink(&linkArray,switchid);
+		for(i=0;i<NUMHOSTS;i++){
+			sstate.linkout[i] = linkArray.link[k];
+			k += 2;
+		}
+		
+		k = netSwitchInLink(&linkArray,switchid);
+		for(i=0;i<NUMHOSTS;i++){
+			sstate.linkin[i] = linkArray.link[k];
+			k += 2;
+		}
+
+		netCloseSwitchOtherLinks(&linkArray,switchid);
+
+		switchMain(&sstate);
+	}
+}
 
 for (physid = 0; physid < NUMHOSTS; physid++) {
 

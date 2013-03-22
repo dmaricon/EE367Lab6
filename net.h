@@ -1,3 +1,5 @@
+#include "link.h"
+#include "man.h"
 
 /* Create nonblocking connections from the manager to all hosts */
 void netCreateConnections(manLinkArrayType * manLinkArray); 
@@ -32,4 +34,3 @@ void netCloseLinks(linkArrayType * linkArray);
 
 /* Close the host's side of a connection between a host and manager */
 void netCloseManConnections(manLinkArrayType * manLinkArray);
-

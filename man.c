@@ -344,6 +344,8 @@ while(1) {
       printf("Address must be postive. Try again\n");
    else if (netaddr > 10000)
       printf("The address is too big. Try again\n");
+   else if (netaddr == 1000)
+      printf("Address 1000 is reserved for BROADCAST. Try again\n");
    else break;
 }
 

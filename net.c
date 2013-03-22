@@ -124,10 +124,17 @@ close(manLinkArray->link[hostid].toHost[PIPEWRITE]);
 
 void netSetNetworkTopology(linkArrayType * linkArray)
 {
-linkArray->link[0].uniPipeInfo.physIdSrc = 0;
-linkArray->link[0].uniPipeInfo.physIdDst = 1;
-linkArray->link[1].uniPipeInfo.physIdSrc = 1;
-linkArray->link[1].uniPipeInfo.physIdDst = 0;
+	int i;
+	for(i=0;i<NUMHOSTS;i++){
+		linkArray->link[2*i].uniPipeInfo.physIdSrc = i;
+		linkArray->link[2*i].uniPipeInfo.physIdDst = -1;
+		linkArray->link[2*i+1].uniPipeInfo.physIdSrc = -1;
+		linkArray->link[2*i+1].uniPipeInfo.physIdDst = i;
+	}
+//linkArray->link[0].uniPipeInfo.physIdSrc = 0;
+//linkArray->link[0].uniPipeInfo.physIdDst = 1;
+//linkArray->link[1].uniPipeInfo.physIdSrc = 1;
+//linkArray->link[1].uniPipeInfo.physIdDst = 0;
 }
 
 /*
@@ -182,6 +189,62 @@ for (i=0; i<linkArray->numlinks; i++) {
    if (linkArray->link[i].uniPipeInfo.physIdSrc != hostid) 
       close(linkArray->link[i].uniPipeInfo.fd[PIPEWRITE]);
    if (linkArray->link[i].uniPipeInfo.physIdDst != hostid) 
+      close(linkArray->link[i].uniPipeInfo.fd[PIPEREAD]);
+}
+}
+
+/*
+ * Find switch's outgoing link and return its index
+ * from the link array
+ */
+int netSwitchOutLink(linkArrayType * linkArray, int switchid) 
+{
+int i;
+int index;
+
+index = linkArray->numlinks;
+
+for (i=0; i<linkArray->numlinks; i++) {
+   /* Store index if the outgoing link is found */
+   if (linkArray->link[i].uniPipeInfo.physIdSrc == -switchid) 
+      index = i;
+}
+if (index == linkArray->numlinks) 
+   printf("Error:  Can't find outgoing link for switch\n");
+return index; 
+}
+
+/*
+ * Find switch's incoming link and return its index
+ * from the link array
+ */
+int netSwitchInLink(linkArrayType * linkArray, int switchid) 
+{
+int i;
+int index;
+
+index = linkArray->numlinks;
+
+for (i=0; i<linkArray->numlinks; i++) {
+   /* Store index if the outgoing link is found */
+   if (linkArray->link[i].uniPipeInfo.physIdDst == -switchid) index = i;
+}
+if (index == linkArray->numlinks) 
+   printf("Error:  Can't find outgoing link for switch\n");
+return index; 
+}
+
+/*
+ * Close links not connected to the switch
+ */
+void netCloseSwitchOtherLinks(linkArrayType * linkArray, int switchid)
+{
+int i;
+
+for (i=0; i<linkArray->numlinks; i++) {
+   if (linkArray->link[i].uniPipeInfo.physIdSrc != -switchid) 
+      close(linkArray->link[i].uniPipeInfo.fd[PIPEWRITE]);
+   if (linkArray->link[i].uniPipeInfo.physIdDst != -switchid) 
       close(linkArray->link[i].uniPipeInfo.fd[PIPEREAD]);
 }
 }

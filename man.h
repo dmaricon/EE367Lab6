@@ -1,4 +1,7 @@
-#define NUMHOSTS 2
+#ifndef MAN_H
+#define MAN_H
+
+#include "link.h"
 
 typedef struct{ /* Connection used by the manager to a host */ 
    int toHost[2]; /* Pipe link to host */
@@ -16,4 +19,4 @@ typedef struct {
  */
 void manMain(manLinkArrayType * manLinkArray);
 
-
+#endif
