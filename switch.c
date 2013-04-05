@@ -2,6 +2,9 @@
 #include "switch.h"
 #include "main.h"
 #include "table.h"
+#include "link.h"
+
+#define DEBUG
 
 void switchInit(switchState* sstate,int switchid)
 {
@@ -16,14 +19,14 @@ void switchMain(switchState* sstate)
 {
 	packetBuffer tmpbuff;
 	int i,j;
+	int received;
 	while(1){
 		//check incoming links for packets
 		for(i=0;i<NUMHOSTS;i++){
 			linkReceive(&(sstate->linkin[i]),&tmpbuff);
 
-			//if packet is new, update table and store in packet queue
-			if(tmpbuff.valid==1){
-				printf("Switch: packet received\n");
+			//if packet is received, update table and store in packet queue
+			if(tmpbuff.valid && tmpbuff.new){
 
 				tmpbuff.linkIndex = i;
 				//check forwarding table for sender's address
@@ -43,8 +46,16 @@ void switchMain(switchState* sstate)
 						}
 
 				in(&(sstate->packetQueue),tmpbuff);
+#ifdef DEBUG
+				printf("Packet placed in queue\n");
+				printf("Forwarding Table:\n");
+				printf("D L\n");
+				for(j=0;j<TABLESIZE;j++){
+					if(sstate->fTable[j].valid)
+					printf("%d %d\n",sstate->fTable[j].dstAddr,sstate->fTable[j].linkout);
+				}
+#endif
 			}
-			tmpbuff.valid = 0;
 		}
 		//check packet queue for transmissions, and transmit one
 		if(!isEmpty(&(sstate->packetQueue))){
@@ -52,7 +63,7 @@ void switchMain(switchState* sstate)
 			
 			//check table for destination address
 			for(i=0;i<TABLESIZE &&
-				!(sstate->fTable[i].valid==1 &&
+				!(sstate->fTable[i].valid &&
 					sstate->fTable[i].dstAddr == tmpbuff.dstaddr);i++);
 			//if found, send along link
 			if(i<TABLESIZE)
@@ -64,7 +75,6 @@ void switchMain(switchState* sstate)
 						linkSend(&(sstate->linkout[i]),&tmpbuff);
 			}
 		}
-		tmpbuff.new = 0;
 		usleep(10000);
 	}
 }

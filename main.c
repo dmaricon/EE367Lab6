@@ -61,22 +61,20 @@ for(switchid=1;switchid<NUMSWITCHES+1;switchid++){
 		return;
 	}
 
-	if(pid==0){ // child process -- switch
+	else if(pid==0){ // child process -- switch
 		printf("Switch process started\n");
 		switchInit(&sstate,switchid);
 
-		k = netSwitchOutLink(&linkArray,switchid);
-		for(i=0;i<NUMHOSTS;i++){
-			sstate.linkout[i] = linkArray.link[k];
-			k += 2;
-		}
-		
 		k = netSwitchInLink(&linkArray,switchid);
-		for(i=0;i<NUMHOSTS;i++){
+		for(i=0;i<NUMHOSTS;i++,k++){
 			sstate.linkin[i] = linkArray.link[k];
-			k += 2;
 		}
 
+		k = netSwitchOutLink(&linkArray,switchid);
+		for(i=0;i<NUMHOSTS;i++,k++){
+			sstate.linkout[i] = linkArray.link[k];
+		}
+		
 		netCloseSwitchOtherLinks(&linkArray,switchid);
 
 		printf("Switch loop started\n");
@@ -133,8 +131,10 @@ netCloseLinks(&linkArray);
 
 /* Close the host's side of connections between a host and manager */
 netCloseManConnections(&manLinkArray);
+printf("asdf\n");
 
 /* Go to main loop for the manager */
+printf("Man loop started\n");
 manMain(& manLinkArray);
 
 /* 
