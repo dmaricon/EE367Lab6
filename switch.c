@@ -47,7 +47,6 @@ void switchMain(switchState* sstate)
 
 				in(&(sstate->packetQueue),tmpbuff);
 #ifdef DEBUG
-				printf("Packet placed in queue\n");
 				printf("Forwarding Table:\n");
 				printf("D L\n");
 				for(j=0;j<TABLESIZE;j++){
