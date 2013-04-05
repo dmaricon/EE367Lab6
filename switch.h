@@ -5,12 +5,14 @@
 #include "link.h"
 #include "table.h"
 
+#define TABLESIZE 100
+
 typedef struct {
 	int switchid;
 	LinkInfo linkin[NUMHOSTS]; //incoming links
 	LinkInfo linkout[NUMHOSTS]; // outgoing links
 	Queue packetQueue; //incoming packets
-	tableEntry fTable[NUMHOSTS]; //forwarding table
+	TableEntry fTable[TABLESIZE]; //forwarding table
 } switchState;
 
 void switchInit(switchState* sstate,int switchid);

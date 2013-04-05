@@ -14,6 +14,7 @@
 #include "host.h"
 #include "net.h"
 #include "switch.h"
+#include "table.h"
 
 #define EMPTY_ADDR  0xffff  /* Indicates that the empty address */
                              /* It also indicates that the broadcast address */
@@ -54,7 +55,14 @@ netSetNetworkTopology(& linkArray);
 
 for(switchid=1;switchid<NUMSWITCHES+1;switchid++){
 	pid = fork();
+
+	if (pid == -1) {
+		printf("Error:  the fork() failed\n");
+		return;
+	}
+
 	if(pid==0){ // child process -- switch
+		printf("Switch process started\n");
 		switchInit(&sstate,switchid);
 
 		k = netSwitchOutLink(&linkArray,switchid);
@@ -71,6 +79,7 @@ for(switchid=1;switchid<NUMSWITCHES+1;switchid++){
 
 		netCloseSwitchOtherLinks(&linkArray,switchid);
 
+		printf("Switch loop started\n");
 		switchMain(&sstate);
 	}
 }

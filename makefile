@@ -24,7 +24,8 @@ link.o:  link.c
 queue.o: queue.c
 	gcc -c queue.c
 
-switch.o: switch.h
+switch.o: switch.c
+	gcc -c switch.c
 
 clean:
 	rm -f net367

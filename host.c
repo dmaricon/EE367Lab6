@@ -205,6 +205,7 @@ while(1) {
       hstate->rcvPacketBuff = tmpbuff;
       hstate->rcvPacketBuff.new = 1;
       hstate->rcvPacketBuff.valid = 1;
+	  hstate->rcvflag = 1;
    }
 
    /* The host goes to sleep for 10 ms */

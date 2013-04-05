@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-typedef int Entry;
+typedef packetBuffer Entry;
 
 typedef struct Node{
 	Entry data;
