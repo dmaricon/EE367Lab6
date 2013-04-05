@@ -149,7 +149,3 @@ manMain(& manLinkArray);
  */
 kill(0, SIGKILL); /* Kill all processes */
 }
-
-
-
-

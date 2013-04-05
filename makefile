@@ -1,5 +1,3 @@
-# Make file
-
 net367: host.o utilities.o link.o man.o main.o net.o queue.o switch.o node.o
 	gcc -o net367 host.o utilities.o link.o man.o main.o net.o queue.o switch.o node.o
 

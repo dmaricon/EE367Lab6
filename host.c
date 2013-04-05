@@ -483,5 +483,3 @@ hstate->rcvPacketBuff.valid = 0;
 hstate->rcvPacketBuff.new = 0;
 hstate->rcvflag = 0;
 }
-
-

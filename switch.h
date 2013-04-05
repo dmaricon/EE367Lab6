@@ -19,3 +19,4 @@ void switchInit(switchState* sstate,int switchid);
 void switchMain(switchState* sstate);
 
 #endif
+
