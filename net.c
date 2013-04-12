@@ -197,46 +197,32 @@ for (i=0; i<linkArray->numlinks; i++) {
  * Find switch's outgoing link and return its index
  * from the link array
  */
-int netSwitchOutLink(linkArrayType * linkArray, int switchid) 
+int netSwitchOutLink(linkArrayType * linkArray, int switchid,int start) 
 {
 int i;
-int index;
 
-index = linkArray->numlinks;
+/* Store index if the outgoing link is found */
+for (i=start; i<linkArray->numlinks; i++)
+    if (linkArray->link[i].uniPipeInfo.physIdSrc == -switchid)
+		return i;
 
-for (i=0; i<linkArray->numlinks; i++) {
-   /* Store index if the outgoing link is found */
-    if (linkArray->link[i].uniPipeInfo.physIdSrc == -switchid){
-        index = i;
-		break;
-	}
-}
-if (index == linkArray->numlinks) 
-   printf("Error:  Can't find outgoing link for switch\n");
-return index; 
+return -1; 
 }
 
 /*
  * Find switch's incoming link and return its index
  * from the link array
  */
-int netSwitchInLink(linkArrayType * linkArray, int switchid) 
+int netSwitchInLink(linkArrayType * linkArray, int switchid,int start) 
 {
 int i;
-int index;
 
-index = linkArray->numlinks;
+/* Store index if the outgoing link is found */
+for (i=start; i<linkArray->numlinks; i++)
+	if (linkArray->link[i].uniPipeInfo.physIdDst == -switchid)
+		return i;
 
-for (i=0; i<linkArray->numlinks; i++) {
-   /* Store index if the outgoing link is found */
-	if (linkArray->link[i].uniPipeInfo.physIdDst == -switchid){
-		index = i;
-		break;
-	}
-}
-if (index == linkArray->numlinks) 
-   printf("Error:  Can't find incoming link for switch\n");
-return index; 
+return -1; 
 }
 
 /*

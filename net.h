@@ -26,6 +26,10 @@ int netHostOutLink(linkArrayType * linkArray, int hostid);
 /* Find host's incoming link and return its index from the link array */
 int netHostInLink(linkArrayType * linkArray, int hostid); 
 
+/* These find the next relevant link, beginning at index start */
+int netSwitchOutLink(linkArrayType* linkArray,int switchid,int start);
+int netSwitchInLink(linkArrayType* linkArray,int switchid,int start);
+
 /* Close links not used by the host */
 void netClearHostOtherLinks(linkArrayType * linkArray, int hostid);
 

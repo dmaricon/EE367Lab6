@@ -64,14 +64,21 @@ for(switchid=1;switchid<NUMSWITCHES+1;switchid++){
 	else if(pid==0){ // child process -- switch
 		switchInit(&sstate,switchid);
 
-		k = netSwitchInLink(&linkArray,switchid);
-		for(i=0;i<NUMHOSTS;i++,k++){
+		// get link information
+		i = 0;
+		k = netSwitchInLink(&linkArray,switchid,0);
+		while(k != -1){
 			sstate.linkin[i] = linkArray.link[k];
+			i++;
+			k = netSwitchInLink(&linkArray,switchid,k+1);
 		}
 
-		k = netSwitchOutLink(&linkArray,switchid);
-		for(i=0;i<NUMHOSTS;i++,k++){
+		i = 0;
+		k = netSwitchOutLink(&linkArray,switchid,0);
+		while(k != -1){
 			sstate.linkout[i] = linkArray.link[k];
+			i++;
+			k = netSwitchOutLink(&linkArray,switchid,k+1);
 		}
 		
 		netCloseSwitchOtherLinks(&linkArray,switchid);

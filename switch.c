@@ -4,8 +4,6 @@
 #include "table.h"
 #include "link.h"
 
-#define DEBUG
-
 void switchInit(switchState* sstate,int switchid)
 {
 	int i;
@@ -47,7 +45,7 @@ void switchMain(switchState* sstate)
 
 				in(&(sstate->packetQueue),tmpbuff);
 #ifdef DEBUG
-				printf("Forwarding Table:\n");
+				printf("Switch %d Forwarding Table:\n",sstate->switchid);
 				printf("D L\n");
 				for(j=0;j<TABLESIZE;j++){
 					if(sstate->fTable[j].valid)
